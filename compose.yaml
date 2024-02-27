@@ -1,0 +1,54 @@
+services:
+
+  mysql:
+    image: 'bitnami/mysql:latest'
+    container_name: mysql
+    # restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      # - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - '.docker/mysql:/bitnami/mysql/data'
+    ports:
+      - '3306:3306'
+
+  redis:
+    image: 'bitnami/redis:latest'
+    container_name: redis
+    # restart: always
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      # - REDIS_PASSWORD=123456
+    ports:
+      - '6379:6379'
+
+  elasticsearch:
+    image: 'bitnami/elasticsearch:latest'
+    container_name: elasticsearch
+    # restart: always
+    ports:
+      - '9200:9200'
+      - '9300:9300'
+    volumes:
+      - '.docker/elasticsearch:/bitnami/elasticsearch/data'
+
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    container_name: zookeeper
+    # restart: always
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    ports:
+      - '2181:2181'
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    # restart: always
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
